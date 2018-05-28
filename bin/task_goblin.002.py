@@ -101,9 +101,9 @@ class CustomListWidget(QWidget):
             print("You got errors!")
         QApplication.restoreOverrideCursor()
 
-    # def keyPressEvent(self, event):
-    #     if event.key() == Qt.Key_Enter + Qt.CTRL:
-    #         print ("YES")
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Enter + Qt.CTRL:
+            print ("YES")
 
 class ListWidgetObject(QListWidget):
     def __init__(self, task_list_collection, tasklist_id,  parent=None):
