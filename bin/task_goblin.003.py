@@ -32,12 +32,12 @@ class CustomListWidget(QWidget):
     def __init__(self, task_title, task_uid, task_list_uid, task_status, parent=None):
         super(CustomListWidget, self).__init__(parent)
         self.task_title = task_title
-        self.task_list_uid = task_list_uid
+        self._tasklist_uid = task_list_uid
         self.parent = parent
         self.widget_layout = QFormLayout()
         self._status = task_status
         self._uid = task_uid
-        self.setObjectName(str(task_uid))
+        self.setObjectName(str(self._uid)
 
         self.checkbox_completion = QCheckBox()
         self.checkbox_completion.clicked.connect(lambda: self.toggle_status_change(self.checkbox_completion.isChecked()))
@@ -98,12 +98,16 @@ class CustomListWidget(QWidget):
     def uid(self):
         return self._uid
 
+    @property
+    def tasklist_uid(self):
+        return self._tasklist_uid
+
     def update_tasks_gtasks(self):
         task_body = {"title": str(self.task_title_textedit.toPlainText()),
                      "status": self.status,
                      "id": self._uid}
         service_obj = authentication_module.setup_authentication()
-        service_obj.tasks().update(tasklist=self.task_list_uid, task=self._uid, body=task_body).execute()
+        service_obj.tasks().update(tasklist=self._tasklist_uid, task=self._uid, body=task_body).execute()
         self.update_task_text_button.setEnabled(False)
 
     def toggle_status_change(self, check_status):
@@ -135,7 +139,7 @@ class ListWidgetObject(QListWidget):
         self.parent = parent
         self.setDragDropMode(QAbstractItemView.InternalMove)
 
-    def sorted_task_list_items(self, task_item_dict):
+    def sorted_task_list_items(self):
         position_aware_items = {}
         for task_item_key, task_item_values in self.task_list_collection["task_items"].items():
             position_aware_items[task_item_values['position']] = {"task_item_key": task_item_key,
@@ -154,7 +158,7 @@ class ListWidgetObject(QListWidget):
             insert_widget_item.setSizeHint(list_item_object.sizeHint())
             self.addItem(insert_widget_item)
             self.setItemWidget(insert_widget_item, list_item_object)
-
+            self.parent.tasks_collection[list_item_object.objectName()] =
 
 class TaskGoblin(QWidget):
     def __init__(self, parent=None):
@@ -222,8 +226,6 @@ class TaskGoblin(QWidget):
         self.tray.setContextMenu(self.tray_menu)
 
         self.window_state = QSettings("PJ", "TaskGoblin")
-
-        self.tasks_collection = dict()
 
     def restore_task_goblin(self):
         self.showNormal()
