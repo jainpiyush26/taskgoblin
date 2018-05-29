@@ -7,26 +7,6 @@ import sys
 from resources import resources
 from authentication import authentication_module
 from collections import defaultdict
-import time
-
-class TaskUpdateThread(QThread):
-    def __init__(self, parent):
-        super(TaskUpdateThread, self).__init__(parent)
-        self.parent = parent
-
-    def update_tasks(self):
-        pass
-        # tab_widget = self.tasks_tab_widget
-        # for tabs in tab_widget.children()
-        # list_widget = tab_widget
-
-    def run(self):
-        while True:
-            QApplication.overrideCursor(Qt.WaitCursor)
-            self.update_tasks()
-            QApplication.restoreOverrideCursor()
-            time.sleep(1800)
-
 
 class CustomListWidget(QWidget):
     def __init__(self, task_title, task_uid, task_list_uid, task_status, parent=None):
