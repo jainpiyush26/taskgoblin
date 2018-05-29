@@ -188,15 +188,16 @@ class TaskGoblin(QWidget):
         self.add_pushbutton.setMaximumSize(30, 30)
         self.add_pushbutton.clicked.connect(self.insert_tasks)
 
-        self.clear_completed_pushbutton = QPushButton(self)
-        self.clear_completed_pushbutton.setIcon(QIcon(":/Images/assets/images/completed.png"))
-        self.clear_completed_pushbutton.setMaximumSize(30, 30)
-        self.clear_completed_pushbutton.setStyleSheet("border:None")
+        self.pull_changes_pushbutton = QPushButton(self)
+        self.pull_changes_pushbutton.setIcon(QIcon(":/Images/assets/images/completed.png"))
+        self.pull_changes_pushbutton.setMaximumSize(30, 30)
+        self.pull_changes_pushbutton.setStyleSheet("border:None")
+        self.pull_changes.clicked.connect(self.pull_gtasks_changes)
 
         self.button_spacer = QSpacerItem(100, 30, hPolicy=QSizePolicy.Expanding, vPolicy=QSizePolicy.Fixed)
         self.pushbutton_layout = QHBoxLayout()
         self.pushbutton_layout.addWidget(self.add_pushbutton)
-        self.pushbutton_layout.addWidget(self.clear_completed_pushbutton)
+        self.pushbutton_layout.addWidget(self.pull_changes_pushbutton)
         self.pushbutton_layout.addItem(self.button_spacer)
 
         self.tasks_tab_widget = QTabWidget(self)

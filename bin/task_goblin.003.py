@@ -17,7 +17,7 @@ class CustomListWidget(QWidget):
         self.widget_layout = QFormLayout()
         self._status = task_status
         self._uid = task_uid
-        self.setObjectName(str(self._uid)
+        self.setObjectName(str(self._uid))
 
         self.checkbox_completion = QCheckBox()
         self.checkbox_completion.clicked.connect(lambda: self.toggle_status_change(self.checkbox_completion.isChecked()))
@@ -127,7 +127,7 @@ class ListWidgetObject(QListWidget):
         return position_aware_items
 
     def init_listwidget_items(self):
-        position_aware_dict = self.sorted_task_list_items(self.task_list_collection["task_items"])
+        position_aware_dict = self.sorted_task_list_items()
         for position, position_values in sorted(position_aware_dict.items()):
             list_item_object = CustomListWidget(task_title=position_values.get("task_item_value")['title'],
                                                 task_uid=position_values.get("task_item_key"),
@@ -138,7 +138,8 @@ class ListWidgetObject(QListWidget):
             insert_widget_item.setSizeHint(list_item_object.sizeHint())
             self.addItem(insert_widget_item)
             self.setItemWidget(insert_widget_item, list_item_object)
-            self.parent.tasks_collection[list_item_object.objectName()] =
+            self.parent().tasks_collection[list_item_object.uid] = list_item_object
+
 
 class TaskGoblin(QWidget):
     def __init__(self, parent=None):
@@ -152,6 +153,7 @@ class TaskGoblin(QWidget):
 
         self.task_list_items = defaultdict(dict)
         self.task_list_objects = {}
+        self.tasks_collection = {}
         self.service_object = None
         # Create the authentication module..
         self.setup_authentication()
@@ -172,15 +174,16 @@ class TaskGoblin(QWidget):
         self.add_pushbutton.setMaximumSize(30, 30)
         self.add_pushbutton.clicked.connect(self.insert_tasks)
 
-        self.clear_completed_pushbutton = QPushButton(self)
-        self.clear_completed_pushbutton.setIcon(QIcon(":/Images/assets/images/completed.png"))
-        self.clear_completed_pushbutton.setMaximumSize(30, 30)
-        self.clear_completed_pushbutton.setStyleSheet("border:None")
+        self.pull_changes_pushbutton = QPushButton(self)
+        self.pull_changes_pushbutton.setIcon(QIcon(":/Images/assets/images/completed.png"))
+        self.pull_changes_pushbutton.setMaximumSize(30, 30)
+        self.pull_changes_pushbutton.setStyleSheet("border:None")
+        self.pull_changes_pushbutton.clicked.connect(self.pull_gtask_changes)
 
         self.button_spacer = QSpacerItem(100, 30, hPolicy=QSizePolicy.Expanding, vPolicy=QSizePolicy.Fixed)
         self.pushbutton_layout = QHBoxLayout()
         self.pushbutton_layout.addWidget(self.add_pushbutton)
-        self.pushbutton_layout.addWidget(self.clear_completed_pushbutton)
+        self.pushbutton_layout.addWidget(self.pull_changes_pushbutton)
         self.pushbutton_layout.addItem(self.button_spacer)
 
         self.tasks_tab_widget = QTabWidget(self)
@@ -241,9 +244,14 @@ class TaskGoblin(QWidget):
                 self.tasks_tab_widget.addTab(listwidget_item, QIcon(":/Images/assets/images/list.png"),
                                              task_list_item_values["title"])
 
-        for items in self.tasks_tab_widget.children():
-            if isinstance(items, QStackedWidget):
-                print (items.children())
+    def pull_gtask_changes(self):
+        # QApplication.setOverrideCursor(Qt.WaitCursor)
+        print ("HERE")
+        for object_uid, object in self.tasks_collection.items():
+            print(object_uid)
+            object.task_title_textedit.setText("TEST DATA")
+            print(object.task_title_textedit.toPlainText())
+        # QApplication.restoreOverrideCursor()
 
     def closeEvent(self, event):
         self.setWindowState(Qt.WindowMinimized)
