@@ -70,6 +70,20 @@ class CustomListWidget(QWidget):
             font-style: normal;
             color: white""")
 
+    def pull_changes_gtasks(self):
+        service_obj = authentication_module.setup_authentication()
+        tasks_pull_object = service_obj.tasks().get(tasklist=self._tasklist_uid, task=self._uid).execute()
+        self.task_title_textedit.setText(tasks_pull_object['title'])
+        if tasks_pull_object.get("deleted"):
+            self.parent.delete_list_item(self)
+            self.deleteLater()
+            return
+        if tasks_pull_object["status"] == "completed":
+            self.checkbox_completion.blockSignals(True)
+            self.checkbox_completion.setChecked(True)
+            self.toggle_status_change(True)
+            self.checkbox_completion.blockSignals(False)
+
     @property
     def status(self):
         return self._status
@@ -111,13 +125,17 @@ class CustomListWidget(QWidget):
 
 
 class ListWidgetObject(QListWidget):
-    def __init__(self, task_list_collection, tasklist_id,  parent=None):
+    def __init__(self, parent, task_list_collection, tasklist_id):
         super(ListWidgetObject, self).__init__(parent)
+        self.parent = parent
         self.tasklist_id = tasklist_id
         self.task_list_collection = task_list_collection
         self.init_listwidget_items()
-        self.parent = parent
         self.setDragDropMode(QAbstractItemView.InternalMove)
+
+    @property
+    def uid(self):
+        return self.tasklist_id
 
     def sorted_task_list_items(self):
         position_aware_items = {}
@@ -129,16 +147,32 @@ class ListWidgetObject(QListWidget):
     def init_listwidget_items(self):
         position_aware_dict = self.sorted_task_list_items()
         for position, position_values in sorted(position_aware_dict.items()):
-            list_item_object = CustomListWidget(task_title=position_values.get("task_item_value")['title'],
-                                                task_uid=position_values.get("task_item_key"),
-                                                task_list_uid=self.tasklist_id,
-                                                task_status=position_values.get("task_item_value")['status'])
+            self.insert_list_item(task_title=position_values.get("task_item_value")['title'],
+                                  task_uid=position_values.get("task_item_key"),
+                                  task_list_uid=self.tasklist_id,
+                                  task_status=position_values.get("task_item_value")['status'])
 
-            insert_widget_item = QListWidgetItem(self)
-            insert_widget_item.setSizeHint(list_item_object.sizeHint())
-            self.addItem(insert_widget_item)
-            self.setItemWidget(insert_widget_item, list_item_object)
-            self.parent().tasks_collection[list_item_object.uid] = list_item_object
+    def delete_list_item(self, list_item):
+        # self.parent.tasks_collection.pop(list_item.uid)
+        to_remove_item = None
+        for item_counter in range(0, self.count()):
+            if list_item == self.itemWidget(self.item(item_counter)):
+                to_remove_item = item_counter
+        self.takeItem(to_remove_item)
+
+
+    def insert_list_item(self, task_title, task_uid, task_list_uid, task_status):
+        list_item_object = CustomListWidget(task_title=task_title,
+                                            task_uid=task_uid,
+                                            task_list_uid=task_list_uid,
+                                            task_status=task_status,
+                                            parent=self)
+
+        insert_widget_item = QListWidgetItem(self)
+        insert_widget_item.setSizeHint(list_item_object.sizeHint())
+        self.insertItem(0, insert_widget_item)
+        self.setItemWidget(insert_widget_item, list_item_object)
+        self.parent.tasks_collection[list_item_object.uid] = list_item_object
 
 
 class TaskGoblin(QWidget):
@@ -214,19 +248,24 @@ class TaskGoblin(QWidget):
         self.showNormal()
         self.tray.hide()
 
-    def insert_tasks(self):
+    def insert_tasks(self, task_list_id=None, task_item_obj=None, task_item_key=None):
         QApplication.setOverrideCursor(Qt.WaitCursor)
-        current_tab = self.tasks_tab_widget.currentWidget()
-        service = authentication_module.setup_authentication()
-        new_task_object = {"title": ""}
-        new_task_item = service.tasks().insert(tasklist=current_tab.tasklist_id, body=new_task_object).execute()
-        new_listwidget_item = QListWidgetItem()
-        list_item_object = CustomListWidget(task_title=new_task_item.get('title'), task_uid=new_task_item.get('id'),
-                                            task_list_uid=current_tab.tasklist_id, task_status="needsAction")
-        new_listwidget_item.setSizeHint(list_item_object.sizeHint())
-        current_tab.insertItem(0, new_listwidget_item)
-        current_tab.setItemWidget(new_listwidget_item, list_item_object)
-
+        if not task_list_id:
+            current_tab = self.tasks_tab_widget.currentWidget()
+            service = authentication_module.setup_authentication()
+            new_task_object = {"title": ""}
+            new_task_item = service.tasks().insert(tasklist=current_tab.tasklist_id, body=new_task_object).execute()
+            new_listwidget_item = QListWidgetItem()
+            list_item_object = CustomListWidget(task_title=new_task_item.get('title'), task_uid=new_task_item.get('id'),
+                                                task_list_uid=current_tab.tasklist_id, task_status="needsAction",
+                                                parent=current_tab)
+            new_listwidget_item.setSizeHint(list_item_object.sizeHint())
+            current_tab.insertItem(0, new_listwidget_item)
+            current_tab.setItemWidget(new_listwidget_item, list_item_object)
+        else:
+            current_tab = self.task_list_objects[task_list_id]
+            current_tab.insert_list_item(task_title=task_item_obj["title"], task_uid=task_item_key,
+                                         task_list_uid=task_list_id, task_status=task_item_obj["status"])
         QApplication.restoreOverrideCursor()
 
     def setup_authentication(self):
@@ -238,20 +277,26 @@ class TaskGoblin(QWidget):
     def populate_task_list(self):
         for task_list_item_key, task_list_item_values in self.task_list_items.items():
             if task_list_item_values["task_items"]:
-                listwidget_item = ListWidgetObject(tasklist_id=task_list_item_key,
-                                                   task_list_collection=task_list_item_values,
-                                                   parent=self)
+                listwidget_item = ListWidgetObject(self, tasklist_id=task_list_item_key,
+                                                   task_list_collection=task_list_item_values)
+                self.task_list_objects[listwidget_item.uid] = listwidget_item
                 self.tasks_tab_widget.addTab(listwidget_item, QIcon(":/Images/assets/images/list.png"),
                                              task_list_item_values["title"])
 
     def pull_gtask_changes(self):
-        # QApplication.setOverrideCursor(Qt.WaitCursor)
-        print ("HERE")
-        for object_uid, object in self.tasks_collection.items():
-            print(object_uid)
-            object.task_title_textedit.setText("TEST DATA")
-            print(object.task_title_textedit.toPlainText())
-        # QApplication.restoreOverrideCursor()
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        try:
+            for object_uid, object in self.tasks_collection.items():
+                object.pull_changes_gtasks()
+        except:
+            self.tasks_collection.pop(object_uid)
+        self.setup_authentication()
+        for task_list_item_key, task_list_item_values in self.task_list_items.items():
+            for task_item_key in task_list_item_values["task_items"].keys():
+                if not task_item_key in self.tasks_collection.keys():
+                    self.insert_tasks(task_list_item_key, task_list_item_values["task_items"][task_item_key],
+                                      task_item_key)
+        QApplication.restoreOverrideCursor()
 
     def closeEvent(self, event):
         self.setWindowState(Qt.WindowMinimized)
