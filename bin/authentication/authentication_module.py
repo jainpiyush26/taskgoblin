@@ -6,6 +6,15 @@ from collections import defaultdict
 
 
 def setup_authentication():
+    """
+    This will setup the authentication with the google task's API. This uses crendentials stored on your home folder.
+    To get your credentials file please look at how to authenticate your apps
+    https://developers.google.com/api-client-library/python/guide/aaa_oauth
+    There is a very good explaination on how to setup your own credential file. Once received store it on
+    your home folder. You will get a client secret json file which will get converted to credentials
+    file for faster access.
+    :return service :type google.api.object :
+    """
     home_user_path = os.path.expanduser("~")
     scopes = 'https://www.googleapis.com/auth/tasks'
     store = file.Storage(os.path.join(home_user_path, 'credentials.json'))
@@ -20,6 +29,13 @@ def setup_authentication():
 
 
 def get_lists_task(service):
+    """
+    Gets the task list and the tasks per list for the user whose login was used to create the authentication setup.
+    This will generate a default dict whoese keys are the tasklist_ids and the values are the dict of task objects
+    in those lists
+    :param service: :type google.api.object:
+    :return tasks_list_values :type defaultdict:
+    """
     task_lists = service.tasklists().list().execute()
     if not task_lists:
         return None, None
@@ -45,11 +61,3 @@ def get_lists_task(service):
             tasks_list_values[keys]['task_items'] = tasks_items_values[keys]
     return tasks_list_values
 
-
-def insert_task_function(service, task_item, task_list):
-    task_object = {
-        "title": task_item,
-        "notes": "",
-        "due": ""
-    }
-    insert_task = service.tasks().insert(tasklist=task_list, body=task_object).execute()
