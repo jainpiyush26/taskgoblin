@@ -1,15 +1,31 @@
+# Imports
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
-import os
-import re
 import sys
+import os
 from resources import resources
 from authentication import authentication_module
 from collections import defaultdict
 
+ASSETS_PATH = os.path.join(os.path.dirname(__file__), "assets", "stylesheet.css")
+
+
 class CustomListWidget(QWidget):
+    """
+    Creates a custom widget to be added in the listwidget. This will give us a lot more control over the tasks
+    information we will want to add
+    """
     def __init__(self, task_title, task_uid, task_list_uid, task_status, parent=None):
+        """
+        Init function of the task. This represent individual tasks of a task list and contain all the relevant
+        information for that.
+        :param task_title :type string:
+        :param task_uid :type string:
+        :param task_list_uid :type string:
+        :param task_status :type string:
+        :param parent :type QListWidget:
+        """
         super(CustomListWidget, self).__init__(parent)
         self.task_title = task_title
         self._tasklist_uid = task_list_uid
@@ -46,12 +62,20 @@ class CustomListWidget(QWidget):
         self.init_task()
 
     def update_task_button(self):
+        """
+
+        :return:
+        """
         if str(self.task_title_textedit.toPlainText()) != self.task_title:
             self.update_task_text_button.setEnabled(True)
         else:
             self.update_task_text_button.setEnabled(False)
 
     def init_task(self):
+        """
+
+        :return:
+        """
         self.task_title_textedit.setText(self.task_title)
         if self._status == "completed":
             self.checkbox_completion.setChecked(True)
@@ -61,6 +85,10 @@ class CustomListWidget(QWidget):
             self.change_status_appearance()
 
     def change_status_appearance(self):
+        """
+
+        :return:
+        """
         if self._status == "completed":
             self.task_title_textedit.setStyleSheet("""text-decoration: line-through;
             font-style: italic;
@@ -71,6 +99,10 @@ class CustomListWidget(QWidget):
             color: white""")
 
     def pull_changes_gtasks(self):
+        """
+
+        :return:
+        """
         service_obj = authentication_module.setup_authentication()
         tasks_pull_object = service_obj.tasks().get(tasklist=self._tasklist_uid, task=self._uid).execute()
         self.task_title_textedit.setText(tasks_pull_object['title'])
@@ -84,19 +116,11 @@ class CustomListWidget(QWidget):
             self.toggle_status_change(True)
             self.checkbox_completion.blockSignals(False)
 
-    @property
-    def status(self):
-        return self._status
-
-    @property
-    def uid(self):
-        return self._uid
-
-    @property
-    def tasklist_uid(self):
-        return self._tasklist_uid
-
     def update_tasks_gtasks(self):
+        """
+
+        :return:
+        """
         task_body = {"title": str(self.task_title_textedit.toPlainText()),
                      "status": self.status,
                      "id": self._uid}
@@ -105,6 +129,11 @@ class CustomListWidget(QWidget):
         self.update_task_text_button.setEnabled(False)
 
     def toggle_status_change(self, check_status):
+        """
+
+        :param check_status:
+        :return:
+        """
         QApplication.setOverrideCursor(Qt.WaitCursor)
         try:
             if not check_status:
@@ -119,13 +148,50 @@ class CustomListWidget(QWidget):
         QApplication.restoreOverrideCursor()
 
     def keyPressEvent(self, event):
+        """
+
+        :param event:
+        :return:
+        """
         if event.modifiers() == Qt.ControlModifier and event.key() == Qt.Key_Return:
             if self.update_task_text_button.isEnabled():
                 self.update_tasks_gtasks()
 
+    @property
+    def status(self):
+        """
+
+        :return:
+        """
+        return self._status
+
+    @property
+    def uid(self):
+        """
+
+        :return:
+        """
+        return self._uid
+
+    @property
+    def tasklist_uid(self):
+        """
+
+        :return:
+        """
+        return self._tasklist_uid
 
 class ListWidgetObject(QListWidget):
+    """
+
+    """
     def __init__(self, parent, task_list_collection, tasklist_id):
+        """
+
+        :param parent:
+        :param task_list_collection:
+        :param tasklist_id:
+        """
         super(ListWidgetObject, self).__init__(parent)
         self.parent = parent
         self.tasklist_id = tasklist_id
@@ -135,9 +201,17 @@ class ListWidgetObject(QListWidget):
 
     @property
     def uid(self):
+        """
+
+        :return:
+        """
         return self.tasklist_id
 
     def sorted_task_list_items(self):
+        """
+
+        :return:
+        """
         position_aware_items = {}
         for task_item_key, task_item_values in self.task_list_collection["task_items"].items():
             position_aware_items[task_item_values['position']] = {"task_item_key": task_item_key,
@@ -145,6 +219,10 @@ class ListWidgetObject(QListWidget):
         return position_aware_items
 
     def init_listwidget_items(self):
+        """
+
+        :return:
+        """
         position_aware_dict = self.sorted_task_list_items()
         for position, position_values in sorted(position_aware_dict.items()):
             self.insert_list_item(task_title=position_values.get("task_item_value")['title'],
@@ -153,6 +231,11 @@ class ListWidgetObject(QListWidget):
                                   task_status=position_values.get("task_item_value")['status'])
 
     def delete_list_item(self, list_item):
+        """
+
+        :param list_item:
+        :return:
+        """
         # self.parent.tasks_collection.pop(list_item.uid)
         to_remove_item = None
         for item_counter in range(0, self.count()):
@@ -162,6 +245,14 @@ class ListWidgetObject(QListWidget):
 
 
     def insert_list_item(self, task_title, task_uid, task_list_uid, task_status):
+        """
+
+        :param task_title:
+        :param task_uid:
+        :param task_list_uid:
+        :param task_status:
+        :return:
+        """
         list_item_object = CustomListWidget(task_title=task_title,
                                             task_uid=task_uid,
                                             task_list_uid=task_list_uid,
@@ -176,7 +267,14 @@ class ListWidgetObject(QListWidget):
 
 
 class TaskGoblin(QWidget):
+    """
+
+    """
     def __init__(self, parent=None):
+        """
+
+        :param parent:
+        """
         super(TaskGoblin, self).__init__(parent)
         # App basics
         self.setWindowTitle("TaskGoblin")
@@ -184,6 +282,10 @@ class TaskGoblin(QWidget):
         self.setWindowIcon(self.goblin_icon)
         self.setWhatsThis("""This links to your google tasks and uses the google 
         API to give you and easy windows desktop!""")
+
+        # Lets do this in the future not now
+        # with open(ASSETS_PATH, 'r') as file_open:
+        #     self.setStyleSheet(file_open.read())
 
         self.task_list_items = defaultdict(dict)
         self.task_list_objects = {}
@@ -245,10 +347,21 @@ class TaskGoblin(QWidget):
         self.window_state = QSettings("PJ", "TaskGoblin")
 
     def restore_task_goblin(self):
+        """
+
+        :return:
+        """
         self.showNormal()
         self.tray.hide()
 
     def insert_tasks(self, task_list_id=None, task_item_obj=None, task_item_key=None):
+        """
+
+        :param task_list_id:
+        :param task_item_obj:
+        :param task_item_key:
+        :return:
+        """
         QApplication.setOverrideCursor(Qt.WaitCursor)
         if not task_list_id:
             current_tab = self.tasks_tab_widget.currentWidget()
@@ -269,12 +382,20 @@ class TaskGoblin(QWidget):
         QApplication.restoreOverrideCursor()
 
     def setup_authentication(self):
+        """
+
+        :return:
+        """
         self.service = authentication_module.setup_authentication()
         if not self.service:
             return None
         self.task_list_items = authentication_module.get_lists_task(self.service)
 
     def populate_task_list(self):
+        """
+
+        :return:
+        """
         for task_list_item_key, task_list_item_values in self.task_list_items.items():
             if task_list_item_values["task_items"]:
                 listwidget_item = ListWidgetObject(self, tasklist_id=task_list_item_key,
@@ -284,6 +405,10 @@ class TaskGoblin(QWidget):
                                              task_list_item_values["title"])
 
     def pull_gtask_changes(self):
+        """
+
+        :return:
+        """
         QApplication.setOverrideCursor(Qt.WaitCursor)
         try:
             for object_uid, object in self.tasks_collection.items():
@@ -299,12 +424,22 @@ class TaskGoblin(QWidget):
         QApplication.restoreOverrideCursor()
 
     def closeEvent(self, event):
+        """
+
+        :param event:
+        :return:
+        """
         self.setWindowState(Qt.WindowMinimized)
         self.tray.show()
         self.setVisible(False)
         event.ignore()
 
     def changeEvent(self, event):
+        """
+
+        :param event:
+        :return:
+        """
         if event.type() == QEvent.WindowStateChange:
             if self.windowState() & Qt.WindowMinimized:
                 self.window_state.setValue("geometry", self.saveGeometry())
@@ -313,6 +448,14 @@ class TaskGoblin(QWidget):
 
 
 def main():
+    """
+
+    :return:
+    """
+    if sys.platform == "win32":
+        import ctypes
+        task_goblin_app_id = u"pjain.task_goblin.version.3.0.0"
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(task_goblin_app_id)
     app = QApplication(sys.argv)
     task_goblin_window = TaskGoblin()
     task_goblin_window.show()
