@@ -63,7 +63,8 @@ class CustomListWidget(QWidget):
 
     def update_task_button(self):
         """
-
+        Updates the task button if there are any changes in the textedit to ensure that the user knows that
+        they will have to hit that to push the changes to the google tasks
         :return:
         """
         if str(self.task_title_textedit.toPlainText()) != self.task_title:
@@ -73,7 +74,7 @@ class CustomListWidget(QWidget):
 
     def init_task(self):
         """
-
+        Initialise the task and sets up the widget's appearance depending on the status
         :return:
         """
         self.task_title_textedit.setText(self.task_title)
@@ -86,7 +87,7 @@ class CustomListWidget(QWidget):
 
     def change_status_appearance(self):
         """
-
+        If the status is completed then the stylesheet changes
         :return:
         """
         if self._status == "completed":
@@ -100,7 +101,8 @@ class CustomListWidget(QWidget):
 
     def pull_changes_gtasks(self):
         """
-
+        This pulls changes from the google tasks on hitting the refresh button and if the tasks are deleted then
+        the widget is removed. The widget items are also updated depending on the status.
         :return:
         """
         service_obj = authentication_module.setup_authentication()
@@ -118,7 +120,8 @@ class CustomListWidget(QWidget):
 
     def update_tasks_gtasks(self):
         """
-
+        This function is called when the update button is pressed. It sets up the authentication and pushes the changes
+        to the tasklist.
         :return:
         """
         task_body = {"title": str(self.task_title_textedit.toPlainText()),
@@ -130,7 +133,8 @@ class CustomListWidget(QWidget):
 
     def toggle_status_change(self, check_status):
         """
-
+        This calls the change_status_appearance when you hit the checkbox to either complete the task or remove
+        the completion status for a task
         :param check_status:
         :return:
         """
@@ -149,7 +153,8 @@ class CustomListWidget(QWidget):
 
     def keyPressEvent(self, event):
         """
-
+        This enables you to hit Ctrl+Enter from the text edit so that when you do the change, you can hit the update
+        button and push the changes.
         :param event:
         :return:
         """
@@ -160,37 +165,37 @@ class CustomListWidget(QWidget):
     @property
     def status(self):
         """
-
-        :return:
+        Returns the status of the task
+        :return _status :type string:
         """
         return self._status
 
     @property
     def uid(self):
         """
-
-        :return:
+        Returns the uid of the task
+        :return _uid :type string:
         """
         return self._uid
 
     @property
     def tasklist_uid(self):
         """
-
-        :return:
+        Returns the parent tasklist id
+        :return _tasklist_uid :type string:
         """
         return self._tasklist_uid
 
 class ListWidgetObject(QListWidget):
     """
-
+    List widget object to populate the listwidgetitem
     """
     def __init__(self, parent, task_list_collection, tasklist_id):
         """
-
-        :param parent:
-        :param task_list_collection:
-        :param tasklist_id:
+        Initialize the listwidget object,
+        :param parent :type TaskGoblin:
+        :param task_list_collection :type dict:
+        :param tasklist_id :type string:
         """
         super(ListWidgetObject, self).__init__(parent)
         self.parent = parent
@@ -199,18 +204,11 @@ class ListWidgetObject(QListWidget):
         self.init_listwidget_items()
         self.setDragDropMode(QAbstractItemView.InternalMove)
 
-    @property
-    def uid(self):
-        """
-
-        :return:
-        """
-        return self.tasklist_id
-
     def sorted_task_list_items(self):
         """
-
-        :return:
+        Sorts the task items for the tasklist as per their positions, helps in keeping a chronological order
+        maintained in the tasks app on the phone or web.
+        :return position_aware_items :type dict:
         """
         position_aware_items = {}
         for task_item_key, task_item_values in self.task_list_collection["task_items"].items():
@@ -220,7 +218,7 @@ class ListWidgetObject(QListWidget):
 
     def init_listwidget_items(self):
         """
-
+        Initialize the list widget items for all the key, value pair in the position aware items
         :return:
         """
         position_aware_dict = self.sorted_task_list_items()
@@ -232,7 +230,8 @@ class ListWidgetObject(QListWidget):
 
     def delete_list_item(self, list_item):
         """
-
+        Removed the listitemwidget (CustomListWidget) when the task gets removed from the phone application
+        or web application.
         :param list_item:
         :return:
         """
@@ -243,14 +242,14 @@ class ListWidgetObject(QListWidget):
                 to_remove_item = item_counter
         self.takeItem(to_remove_item)
 
-
     def insert_list_item(self, task_title, task_uid, task_list_uid, task_status):
         """
-
-        :param task_title:
-        :param task_uid:
-        :param task_list_uid:
-        :param task_status:
+        Creates a custom listwidgetitem and adds to the self listwidget and adds to the parent's tasks_collection
+        dictionary
+        :param task_title :type string:
+        :param task_uid :type string:
+        :param task_list_uid :type string:
+        :param task_status :type string:
         :return:
         """
         list_item_object = CustomListWidget(task_title=task_title,
@@ -265,14 +264,22 @@ class ListWidgetObject(QListWidget):
         self.setItemWidget(insert_widget_item, list_item_object)
         self.parent.tasks_collection[list_item_object.uid] = list_item_object
 
+    @property
+    def uid(self):
+        """
+        Returns the uid
+        :return tasklist_id :type string:
+        """
+        return self.tasklist_id
+
 
 class TaskGoblin(QWidget):
     """
-
+    Main Taskgoblin application
     """
     def __init__(self, parent=None):
         """
-
+        Init function for the application
         :param parent:
         """
         super(TaskGoblin, self).__init__(parent)
@@ -309,12 +316,14 @@ class TaskGoblin(QWidget):
         self.add_pushbutton.setStyleSheet("border:None")
         self.add_pushbutton.setMaximumSize(30, 30)
         self.add_pushbutton.clicked.connect(self.insert_tasks)
+        self.setToolTip("Add new task")
 
         self.pull_changes_pushbutton = QPushButton(self)
         self.pull_changes_pushbutton.setIcon(QIcon(":/Images/assets/images/completed.png"))
         self.pull_changes_pushbutton.setMaximumSize(30, 30)
         self.pull_changes_pushbutton.setStyleSheet("border:None")
         self.pull_changes_pushbutton.clicked.connect(self.pull_gtask_changes)
+        self.pull_changes_pushbutton.setToolTip("Pull the updates")
 
         self.button_spacer = QSpacerItem(100, 30, hPolicy=QSizePolicy.Expanding, vPolicy=QSizePolicy.Fixed)
         self.pushbutton_layout = QHBoxLayout()
@@ -348,7 +357,7 @@ class TaskGoblin(QWidget):
 
     def restore_task_goblin(self):
         """
-
+        When you restores the application from the system tray
         :return:
         """
         self.showNormal()
@@ -356,10 +365,11 @@ class TaskGoblin(QWidget):
 
     def insert_tasks(self, task_list_id=None, task_item_obj=None, task_item_key=None):
         """
-
-        :param task_list_id:
-        :param task_item_obj:
-        :param task_item_key:
+        This inserts a new task button or on refresh a new task is found from the API. This adds in a new customwidget
+        object to the tasklist depending on the current tab
+        :param task_list_id :type string:
+        :param task_item_obj :type dict:
+        :param task_item_key :type string:
         :return:
         """
         QApplication.setOverrideCursor(Qt.WaitCursor)
@@ -383,7 +393,7 @@ class TaskGoblin(QWidget):
 
     def setup_authentication(self):
         """
-
+        Creates the setup authentication and gets the tasklist dictionary
         :return:
         """
         self.service = authentication_module.setup_authentication()
@@ -393,7 +403,8 @@ class TaskGoblin(QWidget):
 
     def populate_task_list(self):
         """
-
+        For every task lists available from the google tasks api and populates the listwidget with the
+        custom listwidgetitem. This also populates task_list_objects for further use.
         :return:
         """
         for task_list_item_key, task_list_item_values in self.task_list_items.items():
@@ -406,7 +417,8 @@ class TaskGoblin(QWidget):
 
     def pull_gtask_changes(self):
         """
-
+        This gets called when you hit the refresh button, it goes through all the widgets in the tasklist_widget
+        and calls the pull changes for those individual widgets
         :return:
         """
         QApplication.setOverrideCursor(Qt.WaitCursor)
@@ -425,7 +437,7 @@ class TaskGoblin(QWidget):
 
     def closeEvent(self, event):
         """
-
+        Overriding the close event so that we can minimize the application and push the app to the systemtray
         :param event:
         :return:
         """
@@ -436,7 +448,7 @@ class TaskGoblin(QWidget):
 
     def changeEvent(self, event):
         """
-
+        When the user minimizes the systemtray icon is shown and the application hides itself from the taskbar
         :param event:
         :return:
         """
@@ -449,7 +461,7 @@ class TaskGoblin(QWidget):
 
 def main():
     """
-
+    Main function
     :return:
     """
     if sys.platform == "win32":
