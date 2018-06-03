@@ -38,6 +38,7 @@ class CustomListWidget(QWidget):
         self.checkbox_completion = QCheckBox()
         self.checkbox_completion.clicked.connect(lambda: self.toggle_status_change(self.checkbox_completion.isChecked()))
         self.checkbox_completion.setToolTip("click this to complete task!")
+        self.checkbox_completion.setText("")
 
         self.task_title_textedit = QTextEdit()
         self.task_title_textedit.textChanged.connect(self.update_task_button)
@@ -50,7 +51,7 @@ class CustomListWidget(QWidget):
         self.update_task_text_button.setEnabled(False)
         self.update_task_text_button.clicked.connect(self.update_tasks_gtasks)
 
-        self.spacer_item = QSpacerItem(100, 10, hPolicy=QSizePolicy.Expanding, vPolicy=QSizePolicy.Fixed)
+        self.spacer_item = QSpacerItem(80, 10, hPolicy=QSizePolicy.Expanding, vPolicy=QSizePolicy.Fixed)
 
         self.button_layout = QHBoxLayout()
         self.button_layout.addItem(self.spacer_item)
@@ -97,7 +98,7 @@ class CustomListWidget(QWidget):
         else:
             self.task_title_textedit.setStyleSheet("""text-decoration:;
             font-style: normal;
-            color: white""")
+            color: rgb(20, 20, 20)""")
 
     def pull_changes_gtasks(self):
         """
@@ -291,8 +292,8 @@ class TaskGoblin(QWidget):
         API to give you and easy windows desktop!""")
 
         # Lets do this in the future not now
-        # with open(ASSETS_PATH, 'r') as file_open:
-        #     self.setStyleSheet(file_open.read())
+        with open(ASSETS_PATH, 'r') as file_open:
+            self.setStyleSheet(file_open.read())
 
         self.task_list_items = defaultdict(dict)
         self.task_list_objects = {}
@@ -313,14 +314,13 @@ class TaskGoblin(QWidget):
 
         self.add_pushbutton = QPushButton(self)
         self.add_pushbutton.setIcon(QIcon(":/Images/assets/images/plus.png"))
-        self.add_pushbutton.setStyleSheet("border:None")
-        self.add_pushbutton.setMaximumSize(30, 30)
+        self.add_pushbutton.setMaximumSize(50, 50)
         self.add_pushbutton.clicked.connect(self.insert_tasks)
         self.setToolTip("Add new task")
 
         self.pull_changes_pushbutton = QPushButton(self)
         self.pull_changes_pushbutton.setIcon(QIcon(":/Images/assets/images/completed.png"))
-        self.pull_changes_pushbutton.setMaximumSize(30, 30)
+        self.pull_changes_pushbutton.setMaximumSize(50, 50)
         self.pull_changes_pushbutton.setStyleSheet("border:None")
         self.pull_changes_pushbutton.clicked.connect(self.pull_gtask_changes)
         self.pull_changes_pushbutton.setToolTip("Pull the updates")
