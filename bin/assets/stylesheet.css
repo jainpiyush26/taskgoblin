@@ -32,8 +32,16 @@ QPushButton::disabled{
     font-style: italic;
 }
 
+QCheckBox::indicator{
+    background-color: rgb(185, 185, 185);
+}
+
 QCheckBox::indicator:checked {
 	background-color: #4d94ff;
+}
+
+QCheckBox{
+    background-color: transparent;
 }
 
 QTabWidget::pane{
@@ -70,28 +78,32 @@ QTabBar::tab:!selected {
     margin-top: 2px;
 }
 
- QScrollBar:vertical {
-     border: 0px solid grey;
-     background: rgb(185, 185, 185);
-     width: 15px;
-     margin: 22px 0 22px 0;
- }
+QScrollBar:vertical {
+    border: 0px solid grey;
+    background: rgb(185, 185, 185);
+    width: 15px;
+    margin: 22px 0 22px 0;
+}
  QScrollBar::handle:vertical {
-     background: rgb(185, 185, 185);
-     min-height: 20px;
+    background: rgb(185, 185, 185);
+    min-height: 20px;
  }
- QScrollBar::add-line:vertical {
-     border: 0px solid grey;
-     background: #4d94ff;
-     height: 20px;
-     subcontrol-position: bottom;
-     subcontrol-origin: margin;
- }
+QScrollBar::add-line:vertical {
+    border: 0px solid grey;
+    background: #4d94ff;
+    height: 20px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
 
- QScrollBar::sub-line:vertical {
-     border: 0px solid grey;
-     background: #4d94ff;
-     height: 20px;
-     subcontrol-position: top;
-     subcontrol-origin: margin;
- }
+QScrollBar::sub-line:vertical {
+    border: 0px solid grey;
+    background: #4d94ff;
+    height: 20px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+ 
+QListWidget::item:hover{
+    background-color: transparent;
+}
