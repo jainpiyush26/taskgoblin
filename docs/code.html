@@ -1,0 +1,345 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Source Code &#8212; Task Goblin 3.0 documentation</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to Task Goblin’s documentation!" href="index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Task Goblin’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Task Goblin 3.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Source Code</a><ul>
+<li><a class="reference internal" href="#module-task_goblin">Task Goblin</a></li>
+<li><a class="reference internal" href="#module-authentication_module">Authentication</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to Task Goblin’s documentation!</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/code.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="source-code">
+<h1>Source Code<a class="headerlink" href="#source-code" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-task_goblin">
+<span id="task-goblin"></span><h2>Task Goblin<a class="headerlink" href="#module-task_goblin" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="task_goblin.CustomListWidget">
+<em class="property">class </em><code class="descclassname">task_goblin.</code><code class="descname">CustomListWidget</code><span class="sig-paren">(</span><em>task_title</em>, <em>task_uid</em>, <em>task_list_uid</em>, <em>task_status</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/task_goblin.html#CustomListWidget"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#task_goblin.CustomListWidget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QWidget</span></code></p>
+<p>Creates a custom widget to be added in the listwidget. This will give us a lot more control over the tasks
+information we will want to add</p>
+<dl class="method">
+<dt id="task_goblin.CustomListWidget.change_status_appearance">
+<code class="descname">change_status_appearance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/task_goblin.html#CustomListWidget.change_status_appearance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#task_goblin.CustomListWidget.change_status_appearance" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the status is completed then the stylesheet changes
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="task_goblin.CustomListWidget.init_task">
+<code class="descname">init_task</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/task_goblin.html#CustomListWidget.init_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#task_goblin.CustomListWidget.init_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialise the task and sets up the widget’s appearance depending on the status
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="task_goblin.CustomListWidget.keyPressEvent">
+<code class="descname">keyPressEvent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/task_goblin.html#CustomListWidget.keyPressEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#task_goblin.CustomListWidget.keyPressEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>This enables you to hit Ctrl+Enter from the text edit so that when you do the change, you can hit the update
+button and push the changes.
+:param event:
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="task_goblin.CustomListWidget.pull_changes_gtasks">
+<code class="descname">pull_changes_gtasks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/task_goblin.html#CustomListWidget.pull_changes_gtasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#task_goblin.CustomListWidget.pull_changes_gtasks" title="Permalink to this definition">¶</a></dt>
+<dd><p>This pulls changes from the google tasks on hitting the refresh button and if the tasks are deleted then
+the widget is removed. The widget items are also updated depending on the status.
+:return:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="task_goblin.CustomListWidget.status">
+<code class="descname">status</code><a class="headerlink" href="#task_goblin.CustomListWidget.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the status of the task
+:return _status :type string:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="task_goblin.CustomListWidget.tasklist_uid">
+<code class="descname">tasklist_uid</code><a class="headerlink" href="#task_goblin.CustomListWidget.tasklist_uid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the parent tasklist id
+:return _tasklist_uid :type string:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="task_goblin.CustomListWidget.toggle_status_change">
+<code class="descname">toggle_status_change</code><span class="sig-paren">(</span><em>check_status</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/task_goblin.html#CustomListWidget.toggle_status_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#task_goblin.CustomListWidget.toggle_status_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>This calls the change_status_appearance when you hit the checkbox to either complete the task or remove
+the completion status for a task
+:param check_status:
+:return:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="task_goblin.CustomListWidget.uid">
+<code class="descname">uid</code><a class="headerlink" href="#task_goblin.CustomListWidget.uid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the uid of the task
+:return _uid :type string:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="task_goblin.CustomListWidget.update_task_button">
+<code class="descname">update_task_button</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/task_goblin.html#CustomListWidget.update_task_button"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#task_goblin.CustomListWidget.update_task_button" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the task button if there are any changes in the textedit to ensure that the user knows that
+they will have to hit that to push the changes to the google tasks
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="task_goblin.CustomListWidget.update_tasks_gtasks">
+<code class="descname">update_tasks_gtasks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/task_goblin.html#CustomListWidget.update_tasks_gtasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#task_goblin.CustomListWidget.update_tasks_gtasks" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is called when the update button is pressed. It sets up the authentication and pushes the changes
+to the tasklist.
+:return:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="task_goblin.ListWidgetObject">
+<em class="property">class </em><code class="descclassname">task_goblin.</code><code class="descname">ListWidgetObject</code><span class="sig-paren">(</span><em>parent</em>, <em>task_list_collection</em>, <em>tasklist_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/task_goblin.html#ListWidgetObject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#task_goblin.ListWidgetObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QListWidget</span></code></p>
+<p>List widget object to populate the listwidgetitem</p>
+<dl class="method">
+<dt id="task_goblin.ListWidgetObject.delete_list_item">
+<code class="descname">delete_list_item</code><span class="sig-paren">(</span><em>list_item</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/task_goblin.html#ListWidgetObject.delete_list_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#task_goblin.ListWidgetObject.delete_list_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removed the listitemwidget (CustomListWidget) when the task gets removed from the phone application
+or web application.
+:param list_item:
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="task_goblin.ListWidgetObject.init_listwidget_items">
+<code class="descname">init_listwidget_items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/task_goblin.html#ListWidgetObject.init_listwidget_items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#task_goblin.ListWidgetObject.init_listwidget_items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the list widget items for all the key, value pair in the position aware items
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="task_goblin.ListWidgetObject.insert_list_item">
+<code class="descname">insert_list_item</code><span class="sig-paren">(</span><em>task_title</em>, <em>task_uid</em>, <em>task_list_uid</em>, <em>task_status</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/task_goblin.html#ListWidgetObject.insert_list_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#task_goblin.ListWidgetObject.insert_list_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a custom listwidgetitem and adds to the self listwidget and adds to the parent’s tasks_collection
+dictionary
+:param task_title :type string:
+:param task_uid :type string:
+:param task_list_uid :type string:
+:param task_status :type string:
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="task_goblin.ListWidgetObject.sorted_task_list_items">
+<code class="descname">sorted_task_list_items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/task_goblin.html#ListWidgetObject.sorted_task_list_items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#task_goblin.ListWidgetObject.sorted_task_list_items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sorts the task items for the tasklist as per their positions, helps in keeping a chronological order
+maintained in the tasks app on the phone or web.
+:return position_aware_items :type dict:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="task_goblin.ListWidgetObject.uid">
+<code class="descname">uid</code><a class="headerlink" href="#task_goblin.ListWidgetObject.uid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the uid
+:return tasklist_id :type string:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="task_goblin.TaskGoblin">
+<em class="property">class </em><code class="descclassname">task_goblin.</code><code class="descname">TaskGoblin</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/task_goblin.html#TaskGoblin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#task_goblin.TaskGoblin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QWidget</span></code></p>
+<p>Main Taskgoblin application</p>
+<dl class="method">
+<dt id="task_goblin.TaskGoblin.changeEvent">
+<code class="descname">changeEvent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/task_goblin.html#TaskGoblin.changeEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#task_goblin.TaskGoblin.changeEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>When the user minimizes the systemtray icon is shown and the application hides itself from the taskbar
+:param event:
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="task_goblin.TaskGoblin.closeEvent">
+<code class="descname">closeEvent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/task_goblin.html#TaskGoblin.closeEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#task_goblin.TaskGoblin.closeEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overriding the close event so that we can minimize the application and push the app to the systemtray
+:param event:
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="task_goblin.TaskGoblin.insert_tasks">
+<code class="descname">insert_tasks</code><span class="sig-paren">(</span><em>task_list_id=None</em>, <em>task_item_obj=None</em>, <em>task_item_key=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/task_goblin.html#TaskGoblin.insert_tasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#task_goblin.TaskGoblin.insert_tasks" title="Permalink to this definition">¶</a></dt>
+<dd><p>This inserts a new task button or on refresh a new task is found from the API. This adds in a new customwidget
+object to the tasklist depending on the current tab
+:param task_list_id :type string:
+:param task_item_obj :type dict:
+:param task_item_key :type string:
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="task_goblin.TaskGoblin.populate_task_list">
+<code class="descname">populate_task_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/task_goblin.html#TaskGoblin.populate_task_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#task_goblin.TaskGoblin.populate_task_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>For every task lists available from the google tasks api and populates the listwidget with the
+custom listwidgetitem. This also populates task_list_objects for further use.
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="task_goblin.TaskGoblin.pull_gtask_changes">
+<code class="descname">pull_gtask_changes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/task_goblin.html#TaskGoblin.pull_gtask_changes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#task_goblin.TaskGoblin.pull_gtask_changes" title="Permalink to this definition">¶</a></dt>
+<dd><p>This gets called when you hit the refresh button, it goes through all the widgets in the tasklist_widget
+and calls the pull changes for those individual widgets
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="task_goblin.TaskGoblin.restore_task_goblin">
+<code class="descname">restore_task_goblin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/task_goblin.html#TaskGoblin.restore_task_goblin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#task_goblin.TaskGoblin.restore_task_goblin" title="Permalink to this definition">¶</a></dt>
+<dd><p>When you restores the application from the system tray
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="task_goblin.TaskGoblin.setup_authentication">
+<code class="descname">setup_authentication</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/task_goblin.html#TaskGoblin.setup_authentication"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#task_goblin.TaskGoblin.setup_authentication" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the setup authentication and gets the tasklist dictionary
+:return:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="task_goblin.main">
+<code class="descclassname">task_goblin.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/task_goblin.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#task_goblin.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main function
+:return:</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-authentication_module">
+<span id="authentication"></span><h2>Authentication<a class="headerlink" href="#module-authentication_module" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="authentication_module.get_lists_task">
+<code class="descclassname">authentication_module.</code><code class="descname">get_lists_task</code><span class="sig-paren">(</span><em>service</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/authentication_module.html#get_lists_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#authentication_module.get_lists_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the task list and the tasks per list for the user whose login was used to create the authentication setup.
+This will generate a default dict whoese keys are the tasklist_ids and the values are the dict of task objects
+in those lists
+:param service: :type google.api.object:
+:return tasks_list_values :type defaultdict:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="authentication_module.setup_authentication">
+<code class="descclassname">authentication_module.</code><code class="descname">setup_authentication</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/authentication_module.html#setup_authentication"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#authentication_module.setup_authentication" title="Permalink to this definition">¶</a></dt>
+<dd><p>This will setup the authentication with the google task’s API. This uses crendentials stored on your home folder.
+To get your credentials file please look at how to authenticate your apps
+<a class="reference external" href="https://developers.google.com/api-client-library/python/guide/aaa_oauth">https://developers.google.com/api-client-library/python/guide/aaa_oauth</a>
+There is a very good explaination on how to setup your own credential file. Once received store it on
+your home folder. You will get a client secret json file which will get converted to credentials
+file for faster access.
+:return service :type google.api.object :</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Task Goblin’s documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Task Goblin 3.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, PiyushJain.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
+    </div>
+  </body>
+</html>

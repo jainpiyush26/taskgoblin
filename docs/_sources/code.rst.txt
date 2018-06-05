@@ -1,0 +1,16 @@
+Source Code
+=============================
+
+Task Goblin
+-----------
+.. automodule:: task_goblin
+    :members:
+    :undoc-members:
+    :show-inheritance:
+   
+Authentication
+--------------
+.. automodule:: authentication_module
+	:members:
+	:undoc-members:
+ 	:show-inheritance:
