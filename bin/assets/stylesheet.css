@@ -26,7 +26,7 @@ QPushButton:pressed{
 	color:rgb(20,20,20);
 }
 
-QPushButton::disabled{
+QPushButton:disabled{
     background-color:rgb(150, 150, 150);
     text-decoration: line-through;
     font-style: italic;
@@ -48,7 +48,7 @@ QTabWidget::pane{
     border-width: 0px;
 }
 
-QTabWidget::tab-bar{
+QTabWidget:tab-bar{
     left: 5px;
 }
 
@@ -103,7 +103,11 @@ QScrollBar::sub-line:vertical {
     subcontrol-position: top;
     subcontrol-origin: margin;
 }
- 
+
 QListWidget::item:hover{
     background-color: transparent;
+}
+
+QListWidget::item::selection{
+		background-color: transparent;
 }

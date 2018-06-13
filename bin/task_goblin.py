@@ -288,7 +288,7 @@ class TaskGoblin(QWidget):
         self.setWindowTitle("TaskGoblin")
         self.goblin_icon = QIcon(":/Images/assets/images/icon.png")
         self.setWindowIcon(self.goblin_icon)
-        self.setWhatsThis("""This links to your google tasks and uses the google 
+        self.setWhatsThis("""This links to your google tasks and uses the google
         API to give you and easy windows desktop!""")
 
         # Lets do this in the future not now
