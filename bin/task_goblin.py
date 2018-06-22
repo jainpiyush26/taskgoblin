@@ -20,7 +20,7 @@ class CustomListWidget(QWidget):
     """
 
     def __init__(self, task_title, task_uid, task_list_uid, task_status,
-        parent=None):
+                 parent=None):
         """
         Init function of the task. This represent individual tasks of a task
          list and contain all the relevant
@@ -374,23 +374,26 @@ class TaskGoblin(QWidget):
         # Setting up the systemtrayicon
         self.tray_menu = QMenu()
         restore_action = self.tray_menu.addAction("Restore")
-        restore_action.triggered.connect(self.restore_task_goblin)
+        restore_action.triggered.connect(
+            lambda: self.restore_task_goblin("restore"))
         close_action = self.tray_menu.addAction("Exit")
         close_action.triggered.connect(sys.exit)
 
         self.tray = QSystemTrayIcon()
+        self.tray.activated.connect(self.restore_task_goblin)
         self.tray.setIcon(self.goblin_icon)
         self.tray.setContextMenu(self.tray_menu)
 
         self.window_state = QSettings("PJ", "TaskGoblin")
 
-    def restore_task_goblin(self):
+    def restore_task_goblin(self, event=None):
         """
         When you restores the application from the system tray
         :return:
         """
-        self.showNormal()
-        self.tray.hide()
+        if event == QSystemTrayIcon.DoubleClick or event == "restore":
+            self.showNormal()
+            self.tray.hide()
 
     def insert_tasks(self, task_list_id=None, task_item_obj=None, task_item_key=None):
         """
